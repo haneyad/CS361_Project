@@ -17,9 +17,11 @@ app.use(express.static(__dirname+ '/public'));
 
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
-  host: 'classmysql.engr.oregonstate.edu',
-  user: 'cs361_haneyad',
-  password: 'PussyEater898!',
+  // CHANGE IF YOU ACTUALLY WANT ME TO WORK
+  host: 'XXXXXXXXXXXXXXX',
+  user: 'XXXXXXXXXXXXXX',
+  // CHANGE IF YOU ACTUALLY WANT ME TO WORK
+  password: 'XXXXXXXXXXXXXX',
   database: 'cs361_haneyad',
   connectionLimit: 5
 });
