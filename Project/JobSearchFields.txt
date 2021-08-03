@@ -1,0 +1,14 @@
+Base filters:
+* query = ...
+* search_titles = True/False
+* has_image = True/False
+* posted_today = True/False
+* bundle_duplicates = True/False
+* search_distance = ...
+* zip_code = ...
+
+CraigslistJobs filters:
+* is_internship = True/False
+* is_nonprofit = True/False
+* is_telecommuting = True/False
+* employment_type = 'full-time', 'part-time', 'contract', "employee's choice"

@@ -1,0 +1,127 @@
+<H1>Industrial Automation Job Search</H1>
+<div id='header'>
+    <button onclick="window.location='/';" type=“button” id='home-btn'><a href='/'>Home</a></button>
+    <button onclick="window.location='/jobsearch';"type=“button” id='jobsearch-btn'><a href='/jobsearch'>Job Search</a></button>
+</div>
+<br>
+<br>
+<p>
+    Enter keywords to search for industrial automation jobs in the Midwest.
+</p>
+<form action='/execute' method="POST">
+    <label for='query'>Search:</label>
+    <input type='text' id='query' name='query'><br>
+</form>
+<button type='button' id='search-btn'>Search</button>
+<br>
+<br>
+<div id='resultnumber'></div>
+<table id="searchResults">
+    <thead>
+        <tr>
+            <th>Posted</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody id='searchResultsBody'>
+
+    </tbody>
+
+
+<script>
+/*
+    Function for formatting and sending HTTP Request when search is submitted
+*/
+function sendPost(){
+    let keyword = document.getElementById('query').value;
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = () => {
+
+    // print JSON response
+    if (xhr.status >= 200 && xhr.status < 300) {
+        // parse JSON
+        const response = JSON.parse(xhr.responseText);
+        createTables(response);
+    }
+};
+
+const jsonData = {
+    'keyword' : keyword
+};
+
+xhr.open('POST', '/execute');
+
+xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.send(JSON.stringify(jsonData));
+
+}
+
+/*
+    Function for creating tables with data from JSON response
+*/
+function createTables(arrData){
+    myTable = document.getElementById('searchResultsBody');
+    myTable.innerHTML = "";
+
+    // Call function to clear duplicates from SQL query
+    arrCleanData = clearDups(arrData);
+
+    // Counts search results and checks if search result of 1 is actually no matches
+    if (arrCleanData.length == 1){
+        if (typeof(arrCleanData[0]) == 'undefined'){
+        let noMatch = document.getElementById('resultnumber');
+        noMatch.innerText = 'Search Results: 0';
+        return;
+        }
+    }
+    resultNumText = document.getElementById('resultnumber');
+    resultNumText.innerText = 'Search Results: ' + String(arrCleanData.length);
+
+    // Below dynamically adds data to rows to append to search result table
+    for (let i = 0; i< arrCleanData.length; i++) {
+        let newRow = document.createElement('tr');
+
+        let newPosted = document.createElement('td');
+        newPosted.innerText = arrCleanData[i].last_update;
+
+        let newDescription = document.createElement('td');
+        newDescription.innerText = arrCleanData[i].name;
+
+        let newLocation = document.createElement('td');
+        newLocation.innerText = arrCleanData[i].location;
+
+        let newLink = document.createElement('td');
+        newLink.innerHTML = '<a href=' + String(arrCleanData[i].url) + '>' + 'Link' + '</a>';
+        console.log(newLink);
+        
+        newRow.append(newPosted, newDescription, newLocation, newLink);
+        myTable.append(newRow);
+    }
+}
+
+function clearDups(argData){
+    var cleanArr = [];
+    cleanArr.push(argData[0]);
+    for (let i = 1; i< argData.length; i++) {
+        ctr = 0;
+        for( let j = 0; j < cleanArr.length; j++) {
+            if(argData[i].name == cleanArr[j].name) {
+             break;
+            }
+            if(j == (cleanArr.length - 1)){
+                cleanArr.push(argData[i]);
+            }
+        }
+    }
+
+return cleanArr;
+}
+
+
+document.getElementById('search-btn').addEventListener('click', sendPost);
+</script>
