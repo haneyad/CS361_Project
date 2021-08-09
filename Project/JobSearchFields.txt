@@ -12,3 +12,21 @@ CraigslistJobs filters:
 * is_nonprofit = True/False
 * is_telecommuting = True/False
 * employment_type = 'full-time', 'part-time', 'contract', "employee's choice"
+
+CraigslistServices:
+
+
+
+	#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+	1	PRIMARY Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
+More More
+	2	id	varchar(50)	utf8_general_ci		No	None			Change Change	Drop Drop	
+More More
+	3	name	varchar(500)	utf8_general_ci		No	None			Change Change	Drop Drop	
+More More
+	4	url	varchar(500)	utf8_general_ci		No	None			Change Change	Drop Drop	
+More More
+	5	last_update	varchar(100)	utf8_general_ci		No	None			Change Change	Drop Drop	
+More More
+	6	location	varchar(100)	utf8_general_ci		No	None			Change Change	Drop Drop	
+More More

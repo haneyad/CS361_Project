@@ -17,14 +17,13 @@ app.use(express.static(__dirname+ '/public'));
 
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
-  // CHANGE IF YOU ACTUALLY WANT ME TO WORK
-  host: 'XXXXXXXXXXXXXXX',
-  user: 'XXXXXXXXXXXXXX',
-  // CHANGE IF YOU ACTUALLY WANT ME TO WORK
-  password: 'XXXXXXXXXXXXXX',
+  host: 'classmysql.engr.oregonstate.edu',
+  user: 'cs361_haneyad',
+  password: 'PussyEater898!',
   database: 'cs361_haneyad',
   connectionLimit: 5
 });
+
 
 pool.getConnection()
     .then(conn => {
@@ -50,13 +49,47 @@ pool.getConnection()
       //not connected
     });
 
+
 app.get('/', function(req,res){
   res.render('index');
 });
 
+
 app.get('/jobsearch', function(req,res){
   res.render('jobsearch');
 });
+
+
+app.get('/personalstest', function(req,res){
+  res.render('personalstest');
+});
+
+
+app.get('/personals', function(req,res){
+
+  pool.getConnection()
+    .then(conn => {
+      conn.query("SELECT id, last_update, location, name, url FROM cl_personals")
+        .then((rows) => {
+          console.log(rows);
+          res.json(rows);
+          return conn.query("SELECT id, last_update, location, name, url FROM cl_personals");
+        })
+        .then((res) => {
+          console.log(res); 
+          conn.end();
+        })
+        .catch(err => {
+          //handle error
+          console.log(err); 
+          conn.end();
+        })
+        
+    }).catch(err => {
+      //not connected
+    });
+});
+
 
 app.post('/execute',function(req,res,next){
   myQuery = req.body["keyword"];
@@ -85,10 +118,12 @@ app.post('/execute',function(req,res,next){
     });
   });
 
+
 app.use(function(req,res){
   res.status(404);
   res.render('404');
 });
+
 
 app.use(function(err, req, res, next){
   console.error(err.stack);
@@ -96,6 +131,7 @@ app.use(function(err, req, res, next){
   res.status(500);
   res.render('500');
 });
+
 
 app.listen(app.get('port'), function(){
   console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');
